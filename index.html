@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>Con Đĩ Toán Học - Bộ Bách Khoa Toàn Thư Mở</title>
+<style>
+  /* Wikipedia-like styles */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Linux Libertine', Georgia, Times, serif;
+    font-size: 14px;
+    color: #202122;
+    background: #f8f9fa;
+  }
+  a { color: #3366cc; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Header */
+  #mw-head {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: white;
+    border-bottom: 1px solid #a2a9b1;
+    z-index: 100;
+    display: flex; align-items: center;
+    padding: 0 20px; height: 50px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .mw-logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: bold; color: #202122; }
+  .mw-logo-icon { font-size: 32px; }
+  .mw-logo-text small { font-size: 11px; color: #54595d; display: block; font-weight: normal; }
+  .mw-nav { margin-left: auto; display: flex; gap: 15px; font-size: 13px; }
+  .mw-nav a { color: #3366cc; }
+
+  /* Search bar */
+  .mw-search { display: flex; align-items: center; gap: 8px; margin: 0 20px; }
+  .mw-search input {
+    border: 1px solid #a2a9b1; border-radius: 2px;
+    padding: 4px 8px; font-size: 13px; width: 200px;
+  }
+  .mw-search button {
+    background: #f8f9fa; border: 1px solid #a2a9b1;
+    padding: 4px 10px; cursor: pointer; font-size: 12px;
+    border-radius: 2px;
+  }
+
+  /* Layout */
+  #content-wrapper { display: flex; margin-top: 50px; }
+
+  /* Sidebar TOC */
+  #mw-sidebar {
+    width: 200px; min-width: 200px;
+    padding: 20px 10px;
+    font-size: 13px;
+    border-right: 1px solid #a2a9b1;
+    background: white;
+    min-height: calc(100vh - 50px);
+  }
+  .sidebar-title { font-weight: bold; margin-bottom: 10px; color: #54595d; font-size: 11px; text-transform: uppercase; }
+  .toc-list { list-style: none; }
+  .toc-list li { padding: 2px 0; }
+  .toc-list li a { color: #3366cc; font-size: 12px; }
+  .toc-number { color: #54595d; }
+
+  /* Main content */
+  #mw-content {
+    flex: 1;
+    max-width: 960px;
+    padding: 20px 30px;
+    background: white;
+  }
+
+  /* Page header */
+  .page-title {
+    font-family: 'Linux Libertine', Georgia, serif;
+    font-size: 28px; font-weight: normal;
+    border-bottom: 1px solid #a2a9b1;
+    padding-bottom: 5px; margin-bottom: 15px;
+  }
+  .page-tabs {
+    display: flex; gap: 0;
+    border-bottom: 1px solid #a2a9b1;
+    margin-bottom: 20px; font-size: 13px;
+  }
+  .page-tab {
+    padding: 6px 14px;
+    border: 1px solid #a2a9b1; border-bottom: none;
+    background: #f8f9fa; cursor: pointer;
+    color: #3366cc;
+  }
+  .page-tab.active { background: white; color: #202122; font-weight: bold; }
+
+  /* Infobox */
+  .infobox {
+    float: right; clear: right;
+    margin: 0 0 20px 20px;
+    border: 1px solid #a2a9b1;
+    background: #f8f9fa;
+    font-size: 12px;
+    width: 280px;
+    border-collapse: collapse;
+  }
+  .infobox-title {
+    background: #cee0f2;
+    text-align: center;
+    padding: 6px;
+    font-weight: bold;
+    font-size: 13px;
+  }
+  .infobox-image { text-align: center; padding: 10px; border-top: 1px solid #a2a9b1; }
+  .infobox-image .math-ascii {
+    font-family: monospace; font-size: 11px;
+    color: #202122; line-height: 1.6;
+    background: white; padding: 8px;
+    border: 1px solid #ddd;
+    display: inline-block;
+  }
+  .infobox-caption { color: #54595d; font-size: 11px; margin-top: 5px; font-style: italic; }
+  .infobox-row { display: flex; border-top: 1px solid #a2a9b1; }
+  .infobox-label { font-weight: bold; padding: 4px 8px; min-width: 100px; color: #54595d; }
+  .infobox-data { padding: 4px 8px; }
+
+  /* Content styles */
+  h2 {
+    font-family: 'Linux Libertine', Georgia, serif;
+    font-size: 22px; font-weight: normal;
+    border-bottom: 1px solid #a2a9b1;
+    margin: 25px 0 10px; padding-bottom: 4px;
+  }
+  h3 { font-size: 16px; margin: 18px 0 8px; }
+  h4 { font-size: 14px; margin: 14px 0 6px; }
+  p { margin: 8px 0; line-height: 1.6; }
+  .math-block {
+    text-align: center; margin: 15px 0;
+    font-style: italic; font-size: 15px;
+    padding: 10px; background: #f8f9fa;
+    border-left: 3px solid #cee0f2;
+  }
+  .math-inline { font-style: italic; }
+  sup { font-size: 10px; }
+  .citation { color: #3366cc; font-size: 11px; }
+
+  /* Note box */
+  .hatnote {
+    background: #eaf3fb; border-left: 4px solid #3366cc;
+    padding: 8px 12px; margin: 10px 0; font-size: 13px;
+    font-style: italic;
+  }
+
+  /* Table */
+  .wikitable {
+    border-collapse: collapse; margin: 15px 0;
+    font-size: 13px; width: 100%;
+  }
+  .wikitable th, .wikitable td {
+    border: 1px solid #a2a9b1;
+    padding: 6px 10px;
+  }
+  .wikitable th { background: #eaecf0; font-weight: bold; }
+  .wikitable tr:nth-child(even) { background: #f8f9fa; }
+
+  /* References */
+  .reflist { font-size: 12px; column-count: 2; gap: 20px; }
+  .reflist ol { padding-left: 20px; }
+  .reflist li { margin: 4px 0; }
+
+  /* Footer */
+  #mw-footer {
+    background: #f8f9fa; border-top: 1px solid #a2a9b1;
+    padding: 15px 30px; font-size: 12px; color: #54595d;
+    clear: both;
+  }
+
+  /* Disclaimer banner */
+  .disclaimer-banner {
+    background: #fef3cd; border: 1px solid #ffc107;
+    padding: 10px 15px; margin-bottom: 15px;
+    font-size: 13px; border-radius: 2px;
+  }
+  .disclaimer-banner strong { color: #856404; }
+
+  /* Funny highlighted text */
+  .highlight { background: #fff9c4; padding: 1px 3px; }
+  .redlink { color: #ba0000; }
+
+  .edit-section { font-size: 12px; font-weight: normal; color: #54595d; margin-left: 10px; }
+  .edit-section a { color: #3366cc; }
+
+  /* See also box */
+  .navbox {
+    background: #f8f9fa; border: 1px solid #a2a9b1;
+    margin: 20px 0; padding: 10px; font-size: 13px;
+  }
+  .navbox-title { background: #cee0f2; padding: 4px 8px; font-weight: bold; margin: -10px -10px 10px; }
+
+  /* Animated formula easter egg */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+  }
+  .spicy:hover { animation: shake 0.3s ease infinite; color: #ba0000; cursor: help; }
+
+  /* Progress bar joke */
+  .understanding-bar {
+    background: #eee; border-radius: 4px; height: 18px;
+    margin: 5px 0; position: relative; overflow: hidden;
+    border: 1px solid #a2a9b1;
+  }
+  .understanding-fill {
+    height: 100%; border-radius: 4px;
+    display: flex; align-items: center; padding-left: 8px;
+    font-size: 11px; font-weight: bold; color: white;
+    transition: width 1s ease;
+  }
+
+  .toc-box {
+    background: #f8f9fa; border: 1px solid #a2a9b1;
+    display: inline-block; padding: 10px 20px;
+    margin: 10px 0 20px; font-size: 13px;
+    min-width: 200px;
+  }
+  .toc-box-title { text-align: center; font-weight: bold; margin-bottom: 8px; font-size: 14px; }
+  .toc-toggle { font-size: 11px; color: #3366cc; cursor: pointer; float: right; }
+</style>
+</head>
+<body>
+
+<!-- Wikipedia-like Header -->
+<div id="mw-head">
+  <div class="mw-logo">
+    <span class="mw-logo-icon">📚</span>
+    <div>
+      <span>Bộ Bách Khoa Toàn Thư</span>
+      <small>Bách khoa toàn thư mở — dành cho dân học Toán khổ</small>
+    </div>
+  </div>
+  <div class="mw-search">
+    <input type="text" placeholder="Tìm kiếm bài viết...">
+    <button>🔍</button>
+  </div>
+  <div class="mw-nav">
+    <a href="#">Trang chính</a>
+    <a href="#">Thảo luận</a>
+    <a href="#">Đóng góp</a>
+    <a href="#">Đăng nhập</a>
+  </div>
+</div>
+
+<!-- Layout -->
+<div id="content-wrapper">
+
+  <!-- Sidebar -->
+  <div id="mw-sidebar">
+    <div class="sidebar-title">Điều hướng</div>
+    <ul class="toc-list">
+      <li><a href="#">🏠 Trang chính</a></li>
+      <li><a href="#">🎲 Bài ngẫu nhiên</a></li>
+      <li><a href="#">📖 Wikipedia thật</a></li>
+      <li><a href="#">😂 Mấy bài hài</a></li>
+      <li><a href="#">🧮 Toán Học Điên</a></li>
+    </ul>
+    <br>
+    <div class="sidebar-title">Công cụ</div>
+    <ul class="toc-list">
+      <li><a href="#">📄 Liên kết đến đây</a></li>
+      <li><a href="#">📝 In trang này</a></li>
+      <li><a href="#">⬇️ Tải xuống PDF</a></li>
+      <li><a href="#">🔗 Trang vĩnh cửu</a></li>
+      <li><a href="#">📊 Thông tin trang</a></li>
+    </ul>
+    <br>
+    <div class="sidebar-title">Ngôn ngữ</div>
+    <ul class="toc-list">
+      <li><a href="#">🇻🇳 Tiếng Việt</a></li>
+      <li><a href="#">🇺🇸 English</a></li>
+      <li><a href="#">🇫🇷 Français</a></li>
+      <li><a href="#">🌏 +69 ngôn ngữ</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div id="mw-content">
+
+    <!-- Page tabs -->
+    <div class="page-tabs">
+      <div class="page-tab active">Bài viết</div>
+      <div class="page-tab">Thảo luận</div>
+      <div class="page-tab">Xem mã nguồn</div>
+      <div class="page-tab">Lịch sử</div>
+    </div>
+
+    <!-- Page title -->
+    <h1 class="page-title">Con Đĩ Toán Học</h1>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer-banner">
+      ⚠️ <strong>Lưu ý:</strong> Bài viết này là <strong>nội dung hài hước</strong>, được tạo ra để giải trí. Mọi sự tương đồng với các nhân vật, công thức, hay giáo viên Toán thật ngoài đời là <em>hoàn toàn có chủ đích</em>. Đọc xong tự chịu trách nhiệm nếu thi rớt. 😂
+    </div>
+
+    <!-- Hatnote -->
+    <div class="hatnote">
+      📌 Bài này nói về <em>Con Đĩ Toán Học</em> — thực thể đa hình, biến hóa khôn lường, phục vụ mọi bài toán không từ chối ai. Để xem bài về người bình thường bị Toán hành, xem: <a href="#">Sinh viên Đại học Tổng hợp</a>.
+    </div>
+
+    <!-- Infobox -->
+    <table class="infobox">
+      <tr><td class="infobox-title" colspan="2">🧮 Con Đĩ Toán Học</td></tr>
+      <tr><td colspan="2" class="infobox-image">
+        <div class="math-ascii">
+f(x) = f(a) + f'(a)(x-a)<br>
+      f''(a)         f'''(a)<br>
+   + ───────(x-a)² + ──────(x-a)³<br>
+        2!               3!<br>
+                + ... + 🔥
+        </div>
+        <div class="infobox-caption">Mô phỏng nghệ thuật Con Đĩ Toán Học<br>đang "phục vụ" mọi điểm trong không gian</div>
+      </td></tr>
+      <div class="infobox-row">
+        <div class="infobox-label">Phân loại</div>
+        <div class="infobox-data">Hàm số bất lương</div>
+      </div>
+      <div class="infobox-row">
+        <div class="infobox-label">Nơi phát hiện</div>
+        <div class="infobox-data">Giảng đường lúc 7h sáng</div>
+      </div>
+      <div class="infobox-row">
+        <div class="infobox-label">Người tạo ra</div>
+        <div class="infobox-data"><a href="#">Brook Taylor</a> (1685–1731), lúc không có gì chơi</div>
+      </div>
+      <div class="infobox-row">
+        <div class="infobox-label">Mức độ nguy hiểm</div>
+        <div class="infobox-data">⭐⭐⭐⭐⭐ Cực kỳ nguy hiểm với não</div>
+      </div>
+      <div class="infobox-row">
+        <div class="infobox-label">Nạn nhân tiêu biểu</div>
+        <div class="infobox-data">Sinh viên năm nhất khoa Toán - Lý - Tin</div>
+      </div>
+      <div class="infobox-row">
+        <div class="infobox-label">Phương ngữ</div>
+        <div class="infobox-data">Giải tích, Vật lý lý thuyết, Kỹ thuật</div>
+      </div>
+    </table>
+
+    <!-- TOC -->
+    <div class="toc-box">
+      <div class="toc-box-title">Mục lục <span class="toc-toggle">[ẩn]</span></div>
+      <ol style="font-size:12px; padding-left:20px; margin:0;">
+        <li><a href="#dinh-nghia">Định nghĩa (và tại sao nó là đĩ)</a></li>
+        <li><a href="#lich-su">Lịch sử buôn bán</a></li>
+        <li><a href="#cong-thuc">Các công thức hành nghề</a>
+          <ol style="list-style: lower-alpha; padding-left:20px;">
+            <li><a href="#khai-trien">Khai triển cơ bản</a></li>
+            <li><a href="#maclaurin">Series Maclaurin (phiên bản rẻ tiền)</a></li>
+            <li><a href="#toan-phan">Các ví dụ toàn phần</a></li>
+          </ol>
+        </li>
+        <li><a href="#khach-hang">Khách hàng thường gặp</a></li>
+        <li><a href="#he-qua">Hệ quả thảm khốc</a></li>
+        <li><a href="#so-sanh">So sánh với các loại đĩ toán khác</a></li>
+        <li><a href="#tham-khao">Tham khảo</a></li>
+      </ol>
+    </div>
+
+    <!-- Section 1 -->
+    <h2 id="dinh-nghia">1. Định nghĩa (và tại sao nó là đĩ) <span class="edit-section"><a href="#">[sửa]</a></span></h2>
+
+    <p>
+      <b>Con Đĩ Toán Học</b> (tiếng Anh: <em>Mathematical Harlot</em>, thường được gọi là <span class="spicy" title="Hover để rung">Chuỗi Taylor</span>) là một hàm số đặc biệt có khả năng <span class="highlight">giả dạng bất kỳ hàm số nào</span> với độ chính xác tùy ý, miễn là bạn trả đủ số hạng. Nó được đặt tên theo nhà toán học người Anh <a href="#">Brook Taylor</a>, người đã phát hiện ra nó vào năm 1715 trong lúc rảnh rỗi không biết làm gì.
+    </p>
+
+    <p>
+      Lý do được gọi là "Con Đĩ Toán Học" là vì nó <strong>phục vụ tất cả mọi người</strong>, từ sin, cos, e<sup>x</sup>, ln(x) cho đến những hàm kỳ dị nhất mà bạn có thể nghĩ ra. Không phân biệt giàu nghèo, trình độ, hay số mũ. Chỉ cần hàm của bạn <em>khả vi vô số lần</em>, nó sẽ phục vụ.
+    </p>
+
+    <p>
+      Về mặt toán học chính thức (nếu bạn còn quan tâm đến điều đó), Con Đĩ Toán Học được định nghĩa như sau:
+    </p>
+
+    <div class="math-block">
+      f(x) = Σ<sub>n=0</sub><sup>∞</sup> [ f<sup>(n)</sup>(a) / n! ] · (x − a)<sup>n</sup>
+    </div>
+
+    <p>
+      Nói nôm na: bạn đưa cho nó một điểm <span class="math-inline">a</span> (gọi là "điểm xuất phát"), nó sẽ dùng tất cả các đạo hàm tại điểm đó để xây dựng lại toàn bộ hàm số. Giống như một con người chỉ từ một tế bào ADN có thể tái tạo toàn bộ cơ thể — nhưng mà tốn nhiều giấy hơn.
+    </p>
+
+    <!-- Section 2 -->
+    <h2 id="lich-su">2. Lịch sử buôn bán <span class="edit-section"><a href="#">[sửa]</a></span></h2>
+
+    <p>
+      Nguồn gốc của Con Đĩ Toán Học có thể truy ngược về thế kỷ 14, khi nhà toán học Ấn Độ <a href="#">Mādhava of Saṅgamagrāma</a> phát hiện ra rằng sin(x) có thể được xấp xỉ bởi một chuỗi đa thức vô hạn. Tuy nhiên, do không có internet, phát hiện này <strong>bị giấu kín ở Ấn Độ</strong> trong suốt 300 năm mà không ai hay biết.
+    </p>
+
+    <p>
+      Đến năm 1715, <a href="#">Brook Taylor</a> — một ông người Anh rảnh rỗi — đã "tái phát hiện" và công bố chuỗi này. Người ta nghi ngờ ông copy từ công trình của người Ấn Độ nhưng do lúc đó chưa có <a href="#">Turnitin</a>, nên ông vẫn được đặt tên.
+    </p>
+
+    <p>
+      Năm 1742, <a href="#">Colin Maclaurin</a> — một ông Scotland khác — thấy Taylor series hay quá bèn lấy trường hợp đặc biệt <span class="math-inline">a = 0</span> và đặt tên nó là "Maclaurin Series" để cũng được ghi vào sách giáo khoa. Giới toán học gọi đây là hành động <span class="highlight">"đặt tên nhờ bắt gặp"</span> (<em>nomenclature by proximity</em>).
+    </p>
+
+    <div class="hatnote">
+      📜 <strong>Sự thật ít ai biết:</strong> Nếu tính đúng thứ tự phát hiện, chuỗi này nên được gọi là "Chuỗi Mādhava–Gregory–Leibniz–Newton–Taylor–Maclaurin". Nhưng tên dài quá nên mọi người bỏ qua hết và chỉ nhớ Taylor với Maclaurin.
+    </div>
+
+    <!-- Section 3 -->
+    <h2 id="cong-thuc">3. Các công thức hành nghề <span class="edit-section"><a href="#">[sửa]</a></span></h2>
+
+    <h3 id="khai-trien">3.1. Khai triển cơ bản</h3>
+
+    <p>
+      Công thức đầy đủ của Con Đĩ Toán Học (phiên bản không che chắn):
+    </p>
+
+    <div class="math-block">
+      f(x) = f(a) + f'(a)(x-a) + f''(a)(x-a)²/2! + f'''(a)(x-a)³/3! + f⁽⁴⁾(a)(x-a)⁴/4! + ...
+    </div>
+
+    <p>
+      Mỗi số hạng trong chuỗi này đại diện cho một "dịch vụ" mà hàm số cung cấp:
+    </p>
+
+    <ul style="margin: 10px 0 10px 30px; line-height: 1.8;">
+      <li><strong>Số hạng bậc 0:</strong> f(a) — "Dịch vụ cơ bản", chỉ cho bạn biết hàm số ở đâu</li>
+      <li><strong>Số hạng bậc 1:</strong> f'(a)(x-a) — "Dịch vụ tiêu chuẩn", bắt đầu cho thấy xu hướng</li>
+      <li><strong>Số hạng bậc 2:</strong> f''(a)(x-a)²/2! — "Dịch vụ cao cấp", thêm độ cong vào cuộc sống</li>
+      <li><strong>Các số hạng tiếp theo:</strong> — "Gói VIP không giới hạn", càng nhiều càng chính xác</li>
+    </ul>
+
+    <h3 id="maclaurin">3.2. Series Maclaurin — phiên bản rẻ tiền (a = 0)</h3>
+
+    <p>
+      Khi lười đặt điểm khai triển, người ta dùng <span class="math-inline">a = 0</span> và gọi là Maclaurin Series. Đây là các "thực đơn phổ biến" nhất:
+    </p>
+
+    <table class="wikitable">
+      <tr>
+        <th>Hàm số</th>
+        <th>Khai triển Maclaurin</th>
+        <th>Nhận xét</th>
+      </tr>
+      <tr>
+        <td><strong>eˣ</strong></td>
+        <td>1 + x + x²/2! + x³/3! + x⁴/4! + ...</td>
+        <td>🏆 Hàng VIP nhất, luôn hội tụ, không bao giờ từ chối</td>
+      </tr>
+      <tr>
+        <td><strong>sin(x)</strong></td>
+        <td>x − x³/3! + x⁵/5! − x⁷/7! + ...</td>
+        <td>😏 Chỉ dùng số mũ lẻ, có nguyên tắc một chút</td>
+      </tr>
+      <tr>
+        <td><strong>cos(x)</strong></td>
+        <td>1 − x²/2! + x⁴/4! − x⁶/6! + ...</td>
+        <td>😌 Chỉ dùng số mũ chẵn, em gái lành mạnh hơn sin</td>
+      </tr>
+      <tr>
+        <td><strong>ln(1+x)</strong></td>
+        <td>x − x²/2 + x³/3 − x⁴/4 + ...</td>
+        <td>⚠️ Chỉ hội tụ khi |x| ≤ 1, kén chọn hơn eˣ</td>
+      </tr>
+      <tr>
+        <td><strong>1/(1-x)</strong></td>
+        <td>1 + x + x² + x³ + x⁴ + ...</td>
+        <td>😱 Hội tụ khi |x| < 1 thôi, vượt ngưỡng là bùng</td>
+      </tr>
+      <tr>
+        <td><strong>arctan(x)</strong></td>
+        <td>x − x³/3 + x⁵/5 − x⁷/7 + ...</td>
+        <td>🐌 Hội tụ chậm khủng khiếp, phải dùng 10,000 số hạng mới ra π/4</td>
+      </tr>
+    </table>
+
+    <h3 id="toan-phan">3.3. Ví dụ thực tế — Tội ác của e<sup>x</sup></h3>
+
+    <p>
+      Đây là ví dụ kinh điển nhất mà <strong>mọi giáo viên</strong> đều tra tấn học sinh:
+    </p>
+
+    <div class="math-block">
+      e<sup>x</sup> ≈ 1 + x + x²/2 + x³/6 + x⁴/24 + ...
+    </div>
+
+    <p>
+      Ví dụ cụ thể với <span class="math-inline">e¹ ≈ 2.71828...</span>:
+    </p>
+
+    <table class="wikitable">
+      <tr>
+        <th>Số hạng sử dụng</th>
+        <th>Xấp xỉ ra được</th>
+        <th>Sai số</th>
+        <th>Trạng thái tinh thần người tính</th>
+      </tr>
+      <tr>
+        <td>1 số hạng</td>
+        <td>1.000000</td>
+        <td>63.2%</td>
+        <td>😊 Vô tư, chưa hiểu chuyện gì đang xảy ra</td>
+      </tr>
+      <tr>
+        <td>2 số hạng</td>
+        <td>2.000000</td>
+        <td>26.4%</td>
+        <td>🤔 Hmm, có vẻ ổn hơn rồi</td>
+      </tr>
+      <tr>
+        <td>4 số hạng</td>
+        <td>2.666667</td>
+        <td>1.9%</td>
+        <td>😅 OK OK, dần ra đó</td>
+      </tr>
+      <tr>
+        <td>7 số hạng</td>
+        <td>2.718254</td>
+        <td>0.002%</td>
+        <td>😤 Mất 20 phút tính tay, tốt hơn dùng máy tính từ đầu</td>
+      </tr>
+      <tr>
+        <td>∞ số hạng</td>
+        <td>2.718281828...</td>
+        <td>0%</td>
+        <td>💀 Bạn đã chết trước khi tính xong</td>
+      </tr>
+    </table>
+
+    <!-- Section 4 -->
+    <h2 id="khach-hang">4. Khách hàng thường gặp <span class="edit-section"><a href="#">[sửa]</a></span></h2>
+
+    <p>
+      Con Đĩ Toán Học phục vụ đa dạng các "khách hàng" từ nhiều ngành khác nhau. Dưới đây là danh sách những khách quen:
+    </p>
+
+    <h3>4.1. Vật lý học</h3>
+    <p>
+      Đây là <strong>khách VIP số một</strong>. Các nhà vật lý dùng Taylor series mọi lúc mọi nơi. Khi thấy một biểu thức phức tạp, phản ứng tự nhiên của nhà vật lý là: <span class="highlight">"Khai triển Taylor đến bậc 2, bỏ hết số hạng bậc cao, xong."</span>
+    </p>
+    <p>
+      Ví dụ: sin(θ) ≈ θ khi θ nhỏ. Đây là xấp xỉ mà nhà vật lý dùng để giải mọi bài toán con lắc, và tự hỏi tại sao kết quả không khớp thực nghiệm khi θ = 45°.
+    </p>
+
+    <div class="understanding-bar">
+      <div class="understanding-fill" style="width: 95%; background: linear-gradient(90deg, #28a745, #20c997);">
+        Vật lý học: 95% dùng Taylor series thường xuyên
+      </div>
+    </div>
+
+    <h3>4.2. Kỹ thuật</h3>
+    <p>
+      Kỹ sư dùng Taylor series để xấp xỉ mọi thứ, từ ứng suất vật liệu cho đến tín hiệu số. Triết lý của họ: <span class="highlight">"Nếu bậc một đủ dùng thì đừng bao giờ dùng bậc hai."</span>
+    </p>
+
+    <div class="understanding-bar">
+      <div class="understanding-fill" style="width: 80%; background: linear-gradient(90deg, #007bff, #6610f2);">
+        Kỹ thuật: 80% dùng nhưng không hiểu sâu
+      </div>
+    </div>
+
+    <h3>4.3. Sinh viên Toán năm nhất</h3>
+    <p>
+      Đây là <strong>nạn nhân chính</strong>. Họ được giáo viên tra tấn bằng bài tập khai triển Taylor series đến bậc 10 bằng tay, trong khi máy tính bỏ túi có thể làm trong 0.001 giây. Mục đích giáo dục: <em>"Để hiểu bản chất."</em> Thực tế: <em>"Để khổ."</em>
+    </p>
+
+    <div class="understanding-bar">
+      <div class="understanding-fill" style="width: 15%; background: linear-gradient(90deg, #dc3545, #fd7e14);">
+        Sinh viên năm nhất: 15% hiểu, 85% copy
+      </div>
+    </div>
+
+    <h3>4.4. Trí tuệ nhân tạo / Machine Learning</h3>
+    <p>
+      Các thuật toán tối ưu hóa như <a href="#">Newton's Method</a> hay <a href="#">Gradient Descent</a> đều dựa vào Taylor expansion để xấp xỉ hàm mục tiêu. Ironically, bây giờ chính AI đang giúp sinh viên làm bài tập Taylor series. Vòng tròn hoàn tất.
+    </p>
+
+    <!-- Section 5 -->
+    <h2 id="he-qua">5. Hệ quả thảm khốc <span class="edit-section"><a href="#">[sửa]</a></span></h2>
+
+    <p>
+      Việc "thuê" Con Đĩ Toán Học có thể dẫn đến nhiều hệ quả không lường trước:
+    </p>
+
+    <h3>5.1. Hội tụ hay phân kỳ — đó là câu hỏi</h3>
+    <p>
+      Không phải lúc nào Con Đĩ Toán Học cũng "hội tụ" (tức là cho ra kết quả có ý nghĩa). Có những hàm số mà chuỗi Taylor của nó <strong>phân kỳ</strong> — tức là càng thêm số hạng, kết quả càng sai. Đây gọi là <span class="highlight">bán kính hội tụ</span> (<em>radius of convergence</em>), và nó cần được kiểm tra trước khi sử dụng.
+    </p>
+
+    <div class="hatnote">
+      ⚠️ <strong>Cảnh báo:</strong> Dùng Taylor series ngoài bán kính hội tụ giống như đặt hàng pizza đến địa chỉ sai — bạn vẫn trả tiền nhưng không nhận được gì hữu ích.
+    </div>
+
+    <h3>5.2. Sai số chặt cụt (Remainder term)</h3>
+    <p>
+      Khi bạn dừng ở số hạng bậc n, bạn tạo ra một "sai số chặt cụt" được ký hiệu là <span class="math-inline">R<sub>n</sub>(x)</span>. Định lý Lagrange cho biết sai số này bị giới hạn bởi:
+    </p>
+    <div class="math-block">
+      |R<sub>n</sub>(x)| ≤ M · |x − a|<sup>n+1</sup> / (n+1)!
+    </div>
+    <p>
+      Nói đơn giản: sai số càng nhỏ nếu bạn dùng càng nhiều số hạng và <span class="math-inline">x</span> càng gần <span class="math-inline">a</span>. Và sai số này <span class="highlight">không bao giờ bằng 0</span> trừ khi bạn dùng vô hạn số hạng — điều bạn không thể làm trong bài thi 60 phút.
+    </p>
+
+    <h3>5.3. Tác dụng phụ lên não người</h3>
+
+    <table class="wikitable">
+      <tr>
+        <th>Triệu chứng</th>
+        <th>Mức độ</th>
+        <th>Điều trị</th>
+      </tr>
+      <tr>
+        <td>Thấy mọi hàm số đều có thể khai triển Taylor</td>
+        <td>🟡 Nhẹ</td>
+        <td>Nghỉ học một tuần</td>
+      </tr>
+      <tr>
+        <td>Nằm mơ thấy ký hiệu Σ</td>
+        <td>🟠 Trung bình</td>
+        <td>Chơi game thay vì ôn thi</td>
+      </tr>
+      <tr>
+        <td>Tự nhiên khai triển sin(x) khi nhắn tin cho người yêu</td>
+        <td>🔴 Nặng</td>
+        <td>Tham vấn tâm lý khẩn cấp</td>
+      </tr>
+      <tr>
+        <td>Giải thích mọi hiện tượng cuộc sống bằng Taylor series</td>
+        <td>🚨 Nguy hiểm</td>
+        <td>Chuyển ngành ngay lập tức</td>
+      </tr>
+    </table>
+
+    <!-- Section 6 -->
+    <h2 id="so-sanh">6. So sánh với các loại "đĩ toán" khác <span class="edit-section"><a href="#">[sửa]</a></span></h2>
+
+    <p>
+      Con Đĩ Toán Học (Taylor series) không phải là loại duy nhất trong vũ trụ hàm số đa hình. Đây là bảng so sánh với các "đồng nghiệp" của nó:
+    </p>
+
+    <table class="wikitable">
+      <tr>
+        <th>Loại</th>
+        <th>Chuyên môn</th>
+        <th>Địa bàn</th>
+        <th>Nhận xét</th>
+      </tr>
+      <tr>
+        <td><strong>Chuỗi Taylor</strong> 🌟</td>
+        <td>Xấp xỉ hàm khả vi bằng đa thức</td>
+        <td>Toán giải tích, Vật lý, Kỹ thuật</td>
+        <td>Queen bee, phục vụ mọi người</td>
+      </tr>
+      <tr>
+        <td><strong>Chuỗi Fourier</strong> 🎵</td>
+        <td>Xấp xỉ hàm tuần hoàn bằng sin/cos</td>
+        <td>Xử lý tín hiệu, Âm học</td>
+        <td>Chị họ âm nhạc, chuyên sóng và nhạc</td>
+      </tr>
+      <tr>
+        <td><strong>Chuỗi Laurent</strong> 🔮</td>
+        <td>Taylor nhưng có số mũ âm</td>
+        <td>Giải tích phức</td>
+        <td>Em gái bí ẩn, chuyên về kỳ điểm</td>
+      </tr>
+      <tr>
+        <td><strong>Chuỗi Chebyshev</strong> 🏅</td>
+        <td>Xấp xỉ tối ưu hơn Taylor</td>
+        <td>Tính toán số</td>
+        <td>Đứa em tinh tế hơn nhưng ít nổi tiếng</td>
+      </tr>
+      <tr>
+        <td><strong>Khai triển Puiseux</strong> 🌀</td>
+        <td>Taylor nhưng có phân số mũ</td>
+        <td>Hình học đại số</td>
+        <td>Người thân kỳ dị, ít ai biết đến</td>
+      </tr>
+    </table>
+
+    <!-- Navbox -->
+    <div class="navbox">
+      <div class="navbox-title">📐 Xem thêm: Gia đình Đĩ Toán Học</div>
+      <div style="font-size:12px; line-height: 2;">
+        <a href="#">Chuỗi lũy thừa</a> · <a href="#">Hàm sinh</a> · <a href="#">Khai triển tiệm cận</a> · <a href="#">Phép nội suy Lagrange</a> · <a href="#">Xấp xỉ Padé</a> · <a href="#">Giải tích phức</a> · <a href="#">Phép biến đổi Laplace</a> · <a href="#">Chuỗi Fourier</a> · <a href="#">Phương trình vi phân</a> · <a href="#">Giải tích số</a>
+      </div>
+    </div>
+
+    <!-- Section 7 - References -->
+    <h2 id="tham-khao">7. Tham khảo <span class="edit-section"><a href="#">[sửa]</a></span></h2>
+
+    <div class="reflist">
+      <ol>
+        <li>Taylor, B. (1715). <em>Methodus Incrementorum Directa et Inversa</em>. London. (Bản gốc bằng tiếng Latin, dịch nôm na: "Cách tăng và giảm thẳng và ngược")</li>
+        <li>Maclaurin, C. (1742). <em>A Treatise of Fluxions</em>. Edinburgh. (Lấy tên Taylor series và gọi là của mình)</li>
+        <li>Nguyễn Văn A (2023). <em>Tại Sao Tôi Rớt Môn Giải Tích</em>. Nhà xuất bản Đại học Quốc gia TP.HCM.</li>
+        <li>Trần Thị B (2024). <em>Taylor Series và Nỗi Đau Sinh Viên Năm Nhất</em>. Tạp chí Khóc Thầm, số 42.</li>
+        <li>Stack Overflow (2023). "Why does my Taylor series not converge?" — Đã được hỏi 69,420 lần.</li>
+        <li>Wikipedia (2024). "Taylor series". <em>Wikipedia, The Free Encyclopedia</em>. (Bài gốc nghiêm túc hơn nhiều)</li>
+        <li>YouTube (2024). "Taylor Series Explained in 10 Minutes" — 2.3 triệu lượt xem, 500K dislike ẩn.</li>
+        <li>Phạm Văn C (2022). <em>Mối Quan Hệ Phức Tạp Giữa Tôi và e^x</em>. Blog cá nhân, bài đăng lúc 3 giờ sáng.</li>
+      </ol>
+    </div>
+
+    <!-- Categories -->
+    <div style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #a2a9b1; font-size: 12px;">
+      <strong>Thể loại:</strong>
+      <a href="#">Hài hước toán học</a> ·
+      <a href="#">Giải tích</a> ·
+      <a href="#">Thứ hành hạ sinh viên</a> ·
+      <a href="#">Điều Brook Taylor xin lỗi</a> ·
+      <a href="#">Những thứ trông đơn giản nhưng không phải</a> ·
+      <a href="#">Lý do tôi chuyển sang học Văn</a>
+    </div>
+
+  </div><!-- end #mw-content -->
+</div><!-- end #content-wrapper -->
+
+<!-- Footer -->
+<div id="mw-footer">
+  <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+    <div>
+      <strong>Bộ Bách Khoa Toàn Thư Mở</strong><br>
+      Trang này được sửa đổi lần cuối lúc <strong>23:59, ngày 1 tháng 4 năm 2025</strong>, bởi <a href="#">Bot_Làm_Hài</a>.
+    </div>
+    <div>
+      Nội dung được phát hành theo giấy phép <a href="#">CC BY-SA 4.0</a>.<br>
+      <a href="#">Chính sách bảo mật</a> · <a href="#">Miễn trừ trách nhiệm</a> · <a href="#">Liên hệ</a>
+    </div>
+  </div>
+  <div style="margin-top: 10px; color: #72777d; font-style: italic;">
+    ⚠️ Bách Khoa Toàn Thư này không phải Wikipedia. Mọi thông tin chỉ mang tính giải trí. Nếu bạn dùng bài này để thi, tác giả không chịu trách nhiệm. 😂
+  </div>
+</div>
+
+<script>
+  // Easter egg: click on the spicy text
+  document.querySelectorAll('.spicy').forEach(el => {
+    el.addEventListener('click', () => {
+      alert('🧮 Bạn vừa click vào Con Đĩ Toán Học!\n\nPhần thưởng của bạn: f(x) ≈ x - x³/6 + x⁵/120 - ...\n\nĐây là sin(x). Bạn đã biết điều này rồi. 😂');
+    });
+  });
+
+  // Animate progress bars on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.width = entry.target.getAttribute('data-width') || entry.target.style.width;
+      }
+    });
+  });
+
+  // Page tab switching (fake)
+  document.querySelectorAll('.page-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      if (this.textContent !== 'Bài viết') {
+        setTimeout(() => {
+          document.querySelectorAll('.page-tab')[0].classList.add('active');
+          this.classList.remove('active');
+        }, 500);
+      }
+    });
+  });
+
+  // TOC toggle
+  document.querySelector('.toc-toggle').addEventListener('click', function() {
+    const tocItems = document.querySelectorAll('.toc-box ol');
+    tocItems.forEach(el => {
+      el.style.display = el.style.display === 'none' ? '' : 'none';
+    });
+    this.textContent = this.textContent === '[ẩn]' ? '[hiện]' : '[ẩn]';
+  });
+</script>
+
+</body>
+</html>
